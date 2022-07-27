@@ -1,0 +1,28 @@
+{%extends 'admin/admin_panel.html'%}
+
+{%block contents%}
+{%if session.get("adminname") != None%}
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2">
+        <form action="/addgift/" method='post'>
+            <div class="row">
+                <div class="col-4">
+                    <label id='giftname' class="form-label">Gift Name</label>
+                </div>
+                <div class="col-8">
+                    <input type='text' class='form-control' name='giftname' id='giftname'>
+                </div>
+            </div>
+            <button type="submit" class="col-md-2 offset-md-5 btn btn-success mt-3">Add</button>
+        </form>
+    </div>
+</div>
+{%endif%}
+{%endblock contents%}
+
+
+
+
+
+
+

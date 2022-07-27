@@ -1,0 +1,62 @@
+{% extends 'user/layout1.html' %}
+{% block title %}Signup{% endblock %}
+
+{% block form %}
+
+{%set bad=get_flashed_messages(category_filter='failed signup')%}
+{%for u in bad%}
+<div class="alert alert-danger">
+    {{u}}
+</div>
+{%endfor%}
+
+
+<div class="mb-3 d-flex justify-content-center btn-group">
+    <a href="/login" class="btn btn-lg d-inline-block" style="background-color: #a8c868;color:#fff;">Login</a>
+    <a href="/" class="btn btn-lg color3 d-inline-block" style="border:2px solid #a8c868;">Home</a>
+</div>
+
+<form action="/submitsignup/" method="post">
+    <div class="form-floating my-3">
+        {{sform.g_firstname(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="First Name")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.g_lastname(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="Last Name")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.g_email(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="Enter Email")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.g_address(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="Enter Address")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.g_pswd(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="Choose Password")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.g_confirmpswd(class_="form-control form-control-lg",style="background-color:rgba(0, 0,0, 0.5);border: 1px solid #a8c868; color:#fff;",placeholder="Confirm Password")}}
+    </div>
+
+    <div class="form-floating my-3">
+        {{sform.Submit(class_="btn btn-lg color3 d-inline-block",style="background-color:rgba(0, 0,0, 0.5);border:")}}
+    </div>
+    {{sform.csrf_token}}
+</form>
+{% endblock %}
+
+{% block statement%}
+<h1 class="display-3 color1">Mary & John's</h1>
+<h1 class="display-4 color2 mb-3">Wedding invitation</h1>
+
+
+<p class="lead color2">
+    We are delighted to announce that Mary & John are officially tying the knot!
+    Please signup and login to see more details!
+</p>
+<h1 class="display-4 color1 my-3">Signup form</h1>
+{% endblock %}   
+

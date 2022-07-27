@@ -1,0 +1,43 @@
+{% extends 'user/layout1.html'%}
+{% block title%} {{session['user']}} {% endblock %}
+
+{% block statement %}
+    <p class="display-4 color1">Welcome, {{session.get('name')}} </p>
+    <p class="lead color2">
+        We would like to hear from you. Please fill the form let us know your thoughts..
+    </p>
+
+    <div class="bg-dark col-7 p-3">
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Change your gift</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Check Available Hotels</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Send Enquiries</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Buy Aso Ebi</a>
+        <a href="/uploadpic" class="btn-link lead color1 d-block mb-3 px-3">Upload Profile Picture</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">See other Announcements</a>  
+    </div>
+    <div class="d-flex btn-group">
+        <a href="/logout" class="btn btn-lg color3 d-inline-block" style="border:2px solid #BA68C8;">Log out</a>
+    </div>
+{% endblock %}
+
+{% block form %}
+<div class="p-3 mt-5">
+    <form action="/submitregistry/" method="post">
+        <input type='hidden' name='csrf_token' value="{{csrf_token()}}">
+
+        <div class="mb-3">
+            <h4>Please choose all gifts you will be coming with</h4>
+            {%for x in giftschoice%}
+            <input type='checkbox' class='form-check-input' value="{{x.gift_id}}" name='gifts_fromuser'>
+            <label class="form-check-label">{{x.gift_name}}</label><br>
+            
+            {%endfor%}
+            
+        </div>
+        
+        <div class="d-flex btn-group">
+            <button class="btn btn-lg color3 d-inline-block" style="border:2px solid #BA68C8;">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock%}

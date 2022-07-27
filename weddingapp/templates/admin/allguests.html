@@ -1,0 +1,32 @@
+{%extends 'admin/admin_panel.html'%}
+
+{%block contents%}
+{%if session.get("adminname") != None%}
+<h2>All Guests</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Guest Name</th>
+            <th>Date Registered</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for w in invite%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{w.guest_fname}} {{w.guest_lname}}</td>
+            <td>{{w.guest_regdate.strftime('%d %B %Y')}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{%endif%}
+{%endblock contents%}
+
+
+
+
+
+
+

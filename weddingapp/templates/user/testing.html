@@ -1,0 +1,172 @@
+{% extends 'user/layout1.html'%}
+{% block title%} {{session['user']}} {% endblock %}
+
+{% block statement %}
+    <p class="display-4 color1">Welcome, {{session.get('name')}} </p>
+    <p class="lead color2">
+        We would like to hear from you. Please fill the form let us know your thoughts..
+    </p>
+    {% set msg = get_flashed_messages(with_categories=True)%}
+    {% if msg %}
+    {% for i in msg %}
+    {% if i[0] == 'error'%}
+    <p class="alert alert-danger">{{i[1]}}</p>
+    {% else %}
+    <p class="alert alert-success">{{i[1]}}</p>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% set goodreg = get_flashed_messages(category_filter='Reg Complete')%}
+    {% for p in goodreg %}
+    <div class="alert alert-success">
+        {{p}}
+    </div>
+    {%endfor%}
+
+    <div class="bg-dark col-7 p-3">
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Change your gift</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Check Available Hotels</a>
+        <a href="/forum/" class="btn-link lead color1 d-block mb-3 px-3">Send Comment</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">Buy Aso Ebi</a>
+        <a href="/uploadpic" class="btn-link lead color1 d-block mb-3 px-3">Upload Profile Picture</a>
+        <a href="/ajaxtests/" class="btn-link lead color1 d-block mb-3 px-3">Ajax Demo</a>
+        <a href="/#" class="btn-link lead color1 d-block mb-3 px-3">See other Announcements</a>  
+    </div>
+    <div class="d-flex btn-group">
+        <a href="/logout" class="btn btn-lg color3 d-inline-block" style="border:2px solid #BA68C8;">Log out</a>
+    </div>
+{% endblock %}
+
+{% block form %}
+<div class="p-3 mt-5">
+
+        <div class='mb-3'>
+            <select id="mystate" name='mystate' class="form-control">
+                <option>Please Select a State</option>
+                {%for i in states%}
+                <option value='{{i.state_id}}'>{{i.state_name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+
+        <div class='mb-5'>
+            <select id="mylga" name='mylga' class="form-control">
+                <option>Please Select an LGA</option>
+            </select>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <h2>Testing Serialize method</h2>
+        <img src="{{url_for('static',filename='')}}" id='profile'>
+        
+        <form id="myform" method="post" enctype="multipart/form-data">
+            <input class='form-control' type="file" name="image"><br>
+            <input class='form-control' type="text" name="firstname"><br>
+            <input class='form-control' type="text" name="lastname"><br>
+            <input class='form-control' type="hidden" name="csrf_token" value='{{csrf_token()}}'><br>
+            <button type="submit" id='btnserial' class="btn btn-success">Send</button>
+        </form>
+
+
+
+
+
+
+
+        <form action="/ajaxtests/checkusername">
+            <div class="mb-3">
+                <input type='text' name='username' id='username' placeholder='Enter Username' class='form-control'>
+                <p id='feedback'></p>
+            </div>
+            <div class="mb-3">
+                <input type='text' name='pswd' id='pswd' placeholder='Enter Password' class='form-control'>
+            </div>
+            <div class="d-flex btn-group">
+                <button class="btn btn-lg color3 d-inline-block" style="border:2px solid #BA68C8;">Submit</button>
+            </div>
+        </form>
+</div>
+{% endblock%}
+
+{%block custom_script%}
+<script type='text/javascript'>
+    $(document).ready(function(){
+
+        $('#mystate').change(function(){
+            var state=$(this).val()
+            var datasent={"stateid":state}
+
+            $.ajax({
+                url:"{{url_for('ajaxtests_state')}}",
+                data:datasent,
+                type:"get",
+                dataType:"text",
+                success:function(rsp){
+                    $('#mylga').html(rsp)
+                },
+                error:function(errormsg){
+                    console.log(errormsg)
+                }
+            })
+        })
+
+
+
+
+
+
+        $('#username').change(function(){
+            var user_name={'username':$(this).val()}
+            $.ajax({
+                url:"{{ url_for('ajaxtests_submit') }}",
+                data:user_name,
+                dataType:"text",
+                type:"get",
+                beforeSend:function(){},
+                success:function(rsp){
+                    $('#feedback').text(rsp)
+                },  
+                error:function(msg){
+                    console.log(msg)
+                }
+            })
+        })
+
+
+        {#Serialize#}
+        $('#btnserial').click(function(){
+            var form=document.getElementById('myform')
+            var data2send=new FormData(form)
+            data2send.append('missing','I am part of the actual form') {#This Formdata method uses name and not id value#}
+            $.ajax({
+                url:"/ajaxtests/final",
+                data:data2send,
+                dataType:"json",
+                type:"post",
+                beforeSend:function(){},
+                success:function(rsp){
+                    console.log(rsp);alert(rsp.firstname);alert(rsp['lastname']);
+                    
+                    imgloc='/static/images/'+rsp['filename']
+                    $('#profile').attr('src',imgloc)
+                },  
+                error:function(errpr){
+                    console.log(error)
+                }
+            })
+        })
+
+    })
+</script>
+{%endblock custom_script%}

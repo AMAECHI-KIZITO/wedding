@@ -1,0 +1,59 @@
+{%extends 'admin/admin_panel.html'%}
+
+{%block contents%}
+{%if session.get("adminname") != None%}
+
+{%set newgift=get_flashed_messages(category_filter='added')%}
+{%for i in newgift%}
+<div>
+    <h1 class="alert alert-success">{{i}}</h1>
+</div>
+{%endfor%}
+
+{%set removemsg=get_flashed_messages(category_filter='delete')%}
+{%for d in removemsg%}
+<div>
+    <h1 class="alert alert-danger">{{d}}</h1>
+</div>
+{%endfor%}
+
+{%set edit=get_flashed_messages(category_filter='updatedgift')%}
+{%for u in edit%}
+<div>
+    <h5 class="alert alert-success">{{u}}</h5>
+</div>
+{%endfor%}
+
+
+<h2>All Gifts</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Gift Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for z in ag%}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{z.gift_name}}</td>
+            <td><a href="/editgift/{{z.gift_id}}">Edit</a></td>
+            <td><a href="/deletegift/{{z.gift_id}}" onclick='return confirm("Do you really want to delete this record?")'>Delete</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+
+<a href='/addgift/' class="btn btn-primary">Add Gift</a>
+{%endif%}
+{%endblock contents%}
+
+
+
+
+
+
+

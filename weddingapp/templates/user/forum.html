@@ -1,0 +1,63 @@
+{% extends 'user/layout1.html'%}
+{% block title%} Comment {% endblock %}
+
+{% block statement%}
+    <h1 class="display-3 color1">Mary & John's</h1>
+    <h1 class="display-4 color2 mb-3">Wedding invitation</h1>                
+    <p class="lead color2">
+        We are delighted to announce that Mary & John are officially tying the knot!
+        Please login to see more details!
+    </p>
+    <h1 class="display-4 color1 my-3">Forum</h1>
+{% endblock %}
+
+
+{% block form %}
+{%set msg=get_flashed_messages(category_filter='message_sent')%}
+{%for h in msg%}
+<div class="alert alert-success">{{h}}</div>
+{%endfor%}
+
+    <div>
+        
+        <label for='commentside'>Comment</label>
+        <textarea class="form-control" id='commentside'></textarea>
+    </div>
+    <button type='button' id='btn' class='btn btn-secondary'>Post</button>
+
+    <div>
+        <p id='showhere'></p>
+    </div>
+
+{% endblock %}
+
+{%block custom_script%}
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $('#btn').click(function(){
+            var content=$('#commentside').val();
+            data2send={"suggestion":content}
+
+            //make ajax call to the route and send the data over
+            $.ajax({
+                url:"/send_forum/",
+                data:data2send,
+                type:"get",
+                dataType:"text",
+                beforeSend:function(){
+                    if($('#commentside').val()==''){
+                        alert("Your comment cannot be empty")
+                    }
+                },
+                success:function(server_rsp){
+                    $('#commentside').val("")
+                    $('#showhere').text(server_rsp)
+                },
+                error:function(errormsg){
+                    console.log(errormsg)
+                }
+            })
+        })
+    })
+</script>
+{%endblock custom_script%}
